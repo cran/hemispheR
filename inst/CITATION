@@ -1,0 +1,11 @@
+citHeader("To cite hemispheR in publications use:")
+
+bibentry(
+bibtype = "Article",
+  title = "hemispheR: an R package for fisheye canopy image analysis",
+  author = c(person("Francesco","Chianucci"),
+             person("Martin","Macek")),
+  year = 2023,
+  journal= "Agricultural and Forest Meteorology",
+  url = "https://doi.org/10.1016/j.agrformet.2023.109470")
+

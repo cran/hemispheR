@@ -1,0 +1,32 @@
+Package: hemispheR
+Title: Processing Hemispherical Canopy Images
+Version: 0.1.0
+Authors@R: 
+    c(person(given="Francesco",
+          family="Chianucci",
+          email="fchianucci@gmail.com",
+          role = c("aut", "cre"),
+          comment = c(ORCID = "0000-0002-5688-2060")),
+    person(given="Martin", 
+          family="Macek",  
+          email="martin.macek@volny.cz",
+          role = c("aut"),
+          comment = c(ORCID = "0000-0002-5609-5921")))
+Description: Import and classify canopy fish-eye images, estimate angular gap fraction and derive canopy attributes like leaf area index and openness.  Additional information is provided in the study by Chianucci F., Macek M. (2023) <doi:10.1016/j.agrformet.2023.109470>.
+License: MIT + file LICENSE
+Encoding: UTF-8
+RoxygenNote: 7.2.2
+Imports: autothresholdr, dplyr, graphics, grDevices, jpeg, magrittr,
+        plotrix, raster, rlang, scales, sp, tidyr
+Depends: R (>= 2.10)
+LazyData: true
+Suggests: spelling
+Language: en-US
+NeedsCompilation: no
+Packaged: 2023-05-04 19:57:29 UTC; francescochianucci
+Author: Francesco Chianucci [aut, cre]
+    (<https://orcid.org/0000-0002-5688-2060>),
+  Martin Macek [aut] (<https://orcid.org/0000-0002-5609-5921>)
+Maintainer: Francesco Chianucci <fchianucci@gmail.com>
+Repository: CRAN
+Date/Publication: 2023-05-05 20:40:05 UTC
