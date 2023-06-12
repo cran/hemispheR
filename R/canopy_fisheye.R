@@ -38,15 +38,15 @@
 #'   canopy_fisheye()
 #' }
 #' @seealso
-#' Chianucci F., Zou J., Leng P., Zhuang Y., Ferrara C. 2019. A new method to estimate clumping index integrating gap fraction averaging with the analysis of gap size distribution. Canadian Journal of Forest Research 49 <https://cdnsciencepub.com/doi/abs/10.1139/cjfr-2018-0213> \cr
+#' Chianucci F., Zou J., Leng P., Zhuang Y., Ferrara C. 2019. A new method to estimate clumping index integrating gap fraction averaging with the analysis of gap size distribution. Canadian Journal of Forest Research 49 \doi{10.1139/cjfr-2018-0213} \cr
 #' \cr
 #' LAI-2200C Plant Canopy Analyzer - Instruction Manuals. Licor.\cr
 #' \cr
 #' Lang A.R.G., Xiang Y. 1986. Estimation of leaf area index from transmission of direct sunlight in discontinuous canopies. Agricultural and Forest Meteorology 37, 228-243. <https://www.sciencedirect.com/science/article/pii/016819238690033X> \cr
 #' \cr
-#' Miller J.B. 1967. A formula for average foliage density. Australian Journal of Botany 15(1) 141 - 144. <https://www.publish.csiro.au/BT/BT9670141>.\cr
+#' Miller J.B. 1967. A formula for average foliage density. Australian Journal of Botany 15(1) 141 - 144. \doi{10.1071/BT9670141} .\cr
 #' \cr
-#' Norman J.M., Campbell G.S. 1986. Canopy structure. In: Plant Physiological Ecology, pp. 301-325 <https://link.springer.com/chapter/10.1007/978-94-009-2221-1_14>.
+#' Norman J.M., Campbell G.S. 1986. Canopy structure. In: Plant Physiological Ecology, pp. 301-325 \doi{10.1007/978-94-009-2221-1_14}.
 #'
 #' @export
 

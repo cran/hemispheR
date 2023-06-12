@@ -1,6 +1,6 @@
 Package: hemispheR
 Title: Processing Hemispherical Canopy Images
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: 
     c(person(given="Francesco",
           family="Chianucci",
@@ -23,10 +23,10 @@ LazyData: true
 Suggests: spelling
 Language: en-US
 NeedsCompilation: no
-Packaged: 2023-05-04 19:57:29 UTC; francescochianucci
+Packaged: 2023-06-12 14:48:59 UTC; francescochianucci
 Author: Francesco Chianucci [aut, cre]
     (<https://orcid.org/0000-0002-5688-2060>),
   Martin Macek [aut] (<https://orcid.org/0000-0002-5609-5921>)
 Maintainer: Francesco Chianucci <fchianucci@gmail.com>
 Repository: CRAN
-Date/Publication: 2023-05-05 20:40:05 UTC
+Date/Publication: 2023-06-12 15:10:02 UTC

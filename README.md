@@ -1,22 +1,23 @@
-
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
 # hemispheR
 
 <!-- badges: start -->
+
 <!-- badges: end -->
 
-<img src="inst/extdata/hemisfer_logo.png" width="200">
+<img src="inst/extdata/hemisfer_logo.png" width="200"/>
 
-The `hemispheR` package allows processing digital
-[hemispherical](https://en.wikipedia.org/wiki/Hemispherical_photography)
-(also called fisheye) images (either circular or fullframe) of forest
-canopies to retrieve canopy attributes like [canopy
-openness](https://www.ecologycenter.us/forest-ecology/measuring-canopy-closure.html)
-and leaf area index
-([LAI](https://en.wikipedia.org/wiki/Leaf_area_index)).
+The `hemispheR` package allows processing digital [hemispherical](https://en.wikipedia.org/wiki/Hemispherical_photography) (also called fisheye) images (either circular or fullframe) of forest canopies to retrieve canopy attributes like [canopy openness](https://www.ecologycenter.us/forest-ecology/measuring-canopy-closure.html) and leaf area index ([LAI](https://en.wikipedia.org/wiki/Leaf_area_index)).
 
 ## Installation
+
+You can install `hemispheR` from CRAN:
+
+```{r}
+install.packages('hemispheR')
+```
+
 You can install the development version of `hemispheR` using `devtools`:
 
 ``` r
@@ -26,9 +27,7 @@ devtools::install_git("https://gitlab.com/fchianucci/hemispheR")
 
 # Import a fisheye image
 
-A distinct feature of (circular) hemispherical images is that a circular
-mask should be applied to exclude outer pixels from analyses. The
-`import_fisheye()` function allows importing fisheye images as:
+A distinct feature of (circular) hemispherical images is that a circular mask should be applied to exclude outer pixels from analyses. The `import_fisheye()` function allows importing fisheye images as:
 
 ``` r
 image<-system.file('extdata/circular_coolpix4500+FC-E8_chestnut.jpg',package='hemispheR')
@@ -42,36 +41,19 @@ img<-import_fisheye(image,
                     message=TRUE)
 ```
 
-<img src="man/figures/README-import1-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-import1-1.png" width="60%" style="display: block; margin: auto;"/>
 
-The function has the following parameters:  
-- *filename*: the input image name; any kind of image (i.e., raster
-matrix) can be read using `raster::raster()` functionality;  
-- *channel*: the band number (Default value is 3, corresponding to blue
-channel in RGB images, which can be equivalently selected as ‘B’).
-Mixing channel options are also available such as ‘GLA’, ‘Luma’, ‘2BG’,
-‘GEI’, ‘RGB’, see explanations later;  
-- *circ.mask*: a list of three-parameters (x-center (xc), y-center (yc),
-radius (rc)) needed to apply a circular mask. These parameters can be
-also derived using the `camera_fisheye()` function for known
-camera+lenses. If missing, they are automatically calculated;  
-- *circular*: it allows to specify if the fisheye image is circular
-(*circular*=TRUE) or fullframe (*circular*=FALSE) type; it affects the
-way the radius (rc) is calculated in case *circ.mask* is omitted;  
-- *gamma*: the actual gamma of the image, which is then back-corrected.
-Default value is 2.2, as typical of most image formats (e.g. jpeg
-images). If no gamma correction is required, just write *gamma*=1;  
-- *stretch*: optionally, users can decide to apply a linear stretch to
-the select image channel, to enhance contrast;  
-- *display*: if TRUE, a plot of the imported image is displayed along
-with the circular mask applied;  
-- *message*: if TRUE, a message about the mask parameters applied to
-image is printed.  
+The function has the following parameters:\
+- *filename*: the input image name; any kind of image (i.e., raster matrix) can be read using `raster::raster()` functionality;\
+- *channel*: the band number (Default value is 3, corresponding to blue channel in RGB images, which can be equivalently selected as 'B'). Mixing channel options are also available such as 'GLA', 'Luma', '2BG', 'GEI', 'RGB', see explanations later;\
+- *circ.mask*: a list of three-parameters (x-center (xc), y-center (yc), radius (rc)) needed to apply a circular mask. These parameters can be also derived using the `camera_fisheye()` function for known camera+lenses. If missing, they are automatically calculated;\
+- *circular*: it allows to specify if the fisheye image is circular (*circular*=TRUE) or fullframe (*circular*=FALSE) type; it affects the way the radius (rc) is calculated in case *circ.mask* is omitted;\
+- *gamma*: the actual gamma of the image, which is then back-corrected. Default value is 2.2, as typical of most image formats (e.g. jpeg images). If no gamma correction is required, just write *gamma*=1;\
+- *stretch*: optionally, users can decide to apply a linear stretch to the select image channel, to enhance contrast;\
+- *display*: if TRUE, a plot of the imported image is displayed along with the circular mask applied;\
+- *message*: if TRUE, a message about the mask parameters applied to image is printed.
 
-For circular mask, there is an utility function `camera_fisheye()` which
-provides the three-parameters for a long list of camera+fisheye
-equipments, which can be screened by typing `list.cameras` as in the
-example below:
+For circular mask, there is an utility function `camera_fisheye()` which provides the three-parameters for a long list of camera+fisheye equipments, which can be screened by typing `list.cameras` as in the example below:
 
 ``` r
 list.cameras
@@ -90,8 +72,7 @@ Using the `camera_fisheye()`, the importing will be:
 img<-import_fisheye(image, circ.mask=camera_fisheye('Coolpix4500+FC-E8'))
 ```
 
-The `import_fisheye()` function can also import fullframe fisheye
-images, by setting *circular*=FALSE:
+The `import_fisheye()` function can also import fullframe fisheye images, by setting *circular*=FALSE:
 
 ``` r
 image2<-system.file('extdata/fullframe_D90_Nikkor-10.5_beech.jpg',package='hemispheR')
@@ -102,42 +83,41 @@ img2<-import_fisheye(image2,
                message=TRUE)
 ```
 
-<img src="man/figures/README-import3-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-import3-1.png" width="60%" style="display: block; margin: auto;"/>
 
 ``` r
 #> It is a fullframe fisheye, where xc, yc and radius are 2144, 1424, 2571
 ```
 
-Beside the numeric bands, other options in the `channel` argument are:  
--
-![\`GEI= {2G-R-B}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60GEI%3D%20%7B2G-R-B%7D%60 "`GEI= {2G-R-B}`")  
--
-![\`GLA= {(2G-R-B)\\over (2G+R+B)}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60GLA%3D%20%7B%282G-R-B%29%5Cover%20%282G%2BR%2BB%29%7D%60 "`GLA= {(2G-R-B)\over (2G+R+B)}`")  
--
-![\`Luma= {0.3R+0.59G+011B}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60Luma%3D%20%7B0.3R%2B0.59G%2B011B%7D%60 "`Luma= {0.3R+0.59G+011B}`")  
--
-![\`RGB= {(R+G+B)\\over 3}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60RGB%3D%20%7B%28R%2BG%2BB%29%5Cover%203%7D%60 "`RGB= {(R+G+B)\over 3}`")  
--
-![\`2BG= {(2B-G)}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%602BG%3D%20%7B%282B-G%29%7D%60 "`2BG= {(2B-G)}`")
+Beside the numeric bands, other options in the `channel` argument are:
 
-Both the Green Excess Index
-(‘[GEI](https://www.sciencedirect.com/science/article/abs/pii/S0957417412005635)‘) and the
-Green Leaf Algorithm
-(’[GLA](https://www.tandfonline.com/doi/abs/10.1080/10106040108542184)‘)
-are visible (RGB) vegetation indexes, which are often used for short
-canopies or downward-looking images (see also below).
-The’[Luma](https://alienryderflex.com/hsp.html)’ method provides a
-weighted mean of RGB linear components, which resembles human’s colors
-perception (HSP color model). The ‘2BG’ method aimed to enhance contrast
-between canopy and sky pixels by lightening the blue and darkening the
-green.
+$$
+GEI=2G-R-B
+$$
+
+$$
+GLA=\frac{2G-R-B}{2G+R+B}
+$$
+
+$$
+Luma=0.3R+0.59G+0.11B
+$$
+
+$$
+RGB=\frac{R+G+B}{3}
+$$
+
+$$
+2BG=2B-G
+$$
+
+Both the Green Excess Index ('[GEI](https://www.sciencedirect.com/science/article/abs/pii/S0957417412005635)') and the Green Leaf Algorithm ('[GLA](https://doi.org/10.1080/10106040108542184)') are visible (RGB) vegetation indexes, which are often used for short canopies or downward-looking images (see also below). The'[Luma](https://alienryderflex.com/hsp.html)' method provides a weighted mean of RGB linear components, which resembles human's colors perception (HSP color model). The '2BG' method aimed to enhance contrast between canopy and sky pixels by lightening the blue and darkening the green.
+
+Note: you can also process images hemispherical image created from smartphone panorama images. A tool is described here: <https://www.azandisresearch.com/2023/05/20/update-smartphone-hemispherical-image-analysis/>.
 
 # Classify images
 
-Once imported, the function performs image classification using a single
-automated thresholding from the `auto_thresh()` functionality of the
-[autothresholdr]( https://CRAN.R-project.org/package=autothresholdr)
-package:
+Once imported, the function performs image classification using a single automated thresholding from the `auto_thresh()` functionality of the [autothresholdr](https://CRAN.R-project.org/package=autothresholdr) package:
 
 ``` r
 img.bw<-binarize_fisheye(img,
@@ -148,39 +128,26 @@ img.bw<-binarize_fisheye(img,
                          export=FALSE)
 ```
 
-<img src="man/figures/README-bin-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-bin-1.png" width="60%" style="display: block; margin: auto;"/>
 
-Where:  
-- *img*: is the input single-channel raster generated from
-`import_fisheye()`;  
-- *method*: is the automated thresholding method. Default is set to
-‘Otsu’; for For other methods, see:
-<https://imagej.net/plugins/auto-threshold>;  
-- *zonal*: if set to TRUE, it divides the image in four sectors
-(NE,SE,SW,NW directions) and applies an automated classification
-separatedly to each region; useful in case of uneven light conditions in
-the image;  
-- *manual*: alternatively to the automated method, users can insert a
-numeric threshold value; in this case, manual thresholding overrides
-automated classification;  
-- *display*: if set to TRUE, a plot of the classified image is
-displayed;  
-- *export*: if set tot TRUE, a binary jpeg image is stored in a “result”
-folder.  
+Where:\
+- *img*: is the input single-channel raster generated from `import_fisheye()`;\
+- *method*: is the automated thresholding method. Default is set to 'Otsu'; for For other methods, see: <https://imagej.net/plugins/auto-threshold>;\
+- *zonal*: if set to TRUE, it divides the image in four sectors (NE,SE,SW,NW directions) and applies an automated classification separatedly to each region; useful in case of uneven light conditions in the image;\
+- *manual*: alternatively to the automated method, users can insert a numeric threshold value; in this case, manual thresholding overrides automated classification;\
+- *display*: if set to TRUE, a plot of the classified image is displayed;\
+- *export*: if set tot TRUE, a binary jpeg image is stored in a "result" folder.
 
-As the `import_fisheye()` function also allows to calculate grenness
-indices, the package could be also used for importing and classifying
-downward-looking fisheye images:
+As the `import_fisheye()` function also allows to calculate grenness indices, the package could be also used for importing and classifying downward-looking fisheye images:
 
 ``` r
 downimg<-system.file('extdata/circular_downward_D90-8-15.jpg',package='hemispheR')
 raster::plotRGB(raster::stack(downimg))
 ```
 
-<img src="man/figures/README-bindwd-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-bindwd-1.png" width="60%" style="display: block; margin: auto;"/>
 
-In such a case, we suggest to use the thresholding method=‘Percentile’
-in combination with a grenness index:
+In such a case, we suggest to use the thresholding method='Percentile' in combination with a grenness index:
 
 ``` r
 downimg %>% 
@@ -188,21 +155,22 @@ downimg %>%
   binarize_fisheye(method='Percentile',display=TRUE) 
 ```
 
-<img src="man/figures/README-bindwd2-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-bindwd2-1.png" width="60%" style="display: block; margin: auto;"/>
 
-    #> class      : RasterLayer 
-    #> dimensions : 2848, 4288, 12212224  (nrow, ncol, ncell)
-    #> resolution : 1, 1  (x, y)
-    #> extent     : 0, 4288, 0, 2848  (xmin, xmax, ymin, ymax)
-    #> crs        : NA 
-    #> source     : memory
-    #> names      : circular_downward_D90.8.15.jpg 
-    #> values     : 0, 1  (min, max)
+```         
+#> class      : RasterLayer 
+#> dimensions : 2848, 4288, 12212224  (nrow, ncol, ncell)
+#> resolution : 1, 1  (x, y)
+#> extent     : 0, 4288, 0, 2848  (xmin, xmax, ymin, ymax)
+#> crs        : NA 
+#> source     : memory
+#> names      : circular_downward_D90.8.15.jpg 
+#> values     : 0, 1  (min, max)
+```
 
 # Extract gap fraction from binary images
 
-The `gapfrac_fisheye()` function retrieve the angular distribution from
-classified fisheye images, considering the fisheye lens correction, as:
+The `gapfrac_fisheye()` function retrieve the angular distribution from classified fisheye images, considering the fisheye lens correction, as:
 
 ``` r
 gap.frac<-gapfrac_fisheye(
@@ -218,7 +186,7 @@ gap.frac<-gapfrac_fisheye(
 )
 ```
 
-<img src="man/figures/README-gf-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-gf-1.png" width="60%" style="display: block; margin: auto;"/>
 
 ``` r
 head(gap.frac)
@@ -245,28 +213,18 @@ head(gap.frac)
 #> 6       3   FALSE   2.2 FALSE 107   Otsu
 ```
 
-where:  
-- *img.bw*: is the input single-channel binary image generated from
-`binarize_fisheye()`;  
-- *maxVZA*: is the maximum zenith angle (degree) corresponding to the
-radius; it is used to perform lens correction. Default value is set to
-90;  
-- *startVZA*: is the lower zenith angle (degree) used for analysis.
-Default values is set to 0;  
-- *endVZA*: is the upper zenith angle (degree) used for analysis.
-Default value is set to 70;  
-- *lens*: define the lens type used for correcting fisheye distortion;
-see `list.lenses` for a list of various fisheye lens available. If
-omitted, an equidistant projection is assumed by default;  
-- *nrings*: number of zenith rings;  
-- *nseg*: number of azimuth sectors;  
-- *display*: if set to TRUE, it overlaids the image with the zenith and
-azimuth bins;  
-- *message*: if set to TRUE, it reports the applied mask used in the
-analysis.  
+where:\
+- *img.bw*: is the input single-channel binary image generated from `binarize_fisheye()`;\
+- *maxVZA*: is the maximum zenith angle (degree) corresponding to the radius; it is used to perform lens correction. Default value is set to 90;\
+- *startVZA*: is the lower zenith angle (degree) used for analysis. Default values is set to 0;\
+- *endVZA*: is the upper zenith angle (degree) used for analysis. Default value is set to 70;\
+- *lens*: define the lens type used for correcting fisheye distortion; see `list.lenses` for a list of various fisheye lens available. If omitted, an equidistant projection is assumed by default;\
+- *nrings*: number of zenith rings;\
+- *nseg*: number of azimuth sectors;\
+- *display*: if set to TRUE, it overlaids the image with the zenith and azimuth bins;\
+- *message*: if set to TRUE, it reports the applied mask used in the analysis.
 
-A suggested setting for comparability with LAI-2000/2200 Plant Canopy
-Analyzer (five rings, each about 15 degrees in size) is:
+A suggested setting for comparability with LAI-2000/2200 Plant Canopy Analyzer (five rings, each about 15 degrees in size) is:
 
 ``` r
 gap.frac2<-gapfrac_fisheye(
@@ -282,15 +240,11 @@ gap.frac2<-gapfrac_fisheye(
 )
 ```
 
-<img src="man/figures/README-lai2000-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-lai2000-1.png" width="60%" style="display: block; margin: auto;"/>
 
-With this setting the *Le* is comparable with the apparent *L* derived
-from LAI-2000/2200 (see [Chianucci et
-al. 2015](https://doi.org/10.1007/s00468-014-1115-x)).  
+With this setting the *Le* is comparable with the apparent *L* derived from LAI-2000/2200 (see [Chianucci et al. 2015](https://doi.org/10.1007/s00468-014-1115-x)).
 
-A suggested setting for implementing the [hinge angle
-method](https://hal.archives-ouvertes.fr/hal-02729934/) (which uses a
-fixed restricted view angle centered at 1 radian - about 57 degree), is:
+A suggested setting for implementing the [hinge angle method](https://hal.archives-ouvertes.fr/hal-02729934/) (which uses a fixed restricted view angle centered at 1 radian - about 57 degree), is:
 
 ``` r
 gap.frac3<-gapfrac_fisheye(
@@ -306,10 +260,9 @@ gap.frac3<-gapfrac_fisheye(
 )
 ```
 
-<img src="man/figures/README-p57-1.png" width="60%" style="display: block; margin: auto;" />
+<img src="man/figures/README-p57-1.png" width="60%" style="display: block; margin: auto;"/>
 
-A long list of projection functions is available for the `lens`
-argument, which can be screened by typing:
+A long list of projection functions is available for the `lens` argument, which can be screened by typing:
 
 ``` r
 list.lenses
@@ -339,88 +292,59 @@ list.lenses
 
 # Infer LAI from angular gap fraction
 
-The `canopy_fisheye()` function inverts angular gap fraction from
-fisheye images to derive forest canopy attributes. The function allows
-to estimate both effective (*Le*) and actual (*L*) Leaf area index (LAI)
-using the [Miller’s (1967)](https://www.publish.csiro.au/bt/BT9670141)
-theorem:
+The `canopy_fisheye()` function inverts angular gap fraction from fisheye images to derive forest canopy attributes. The function allows to estimate both effective (*Le*) and actual (*L*) Leaf area index (LAI) using the [Miller's (1967)](https://doi.org/10.1071/BT9670141) theorem:
 
-![\`LAI =2 \\int\_{0}^{\\pi/2} -ln(P_0\\theta cos\\theta \\sin \\theta d \\theta)\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60LAI%20%3D2%20%5Cint_%7B0%7D%5E%7B%5Cpi%2F2%7D%20-ln%28P_0%5Ctheta%20cos%5Ctheta%20%5Csin%20%5Ctheta%20d%20%5Ctheta%29%60 "`LAI =2 \int_{0}^{\pi/2} -ln(P_0\theta cos\theta \sin \theta d \theta)`")
+$$
+LAI =2 \int_{0}^{\pi/2} -ln[P_0(\theta)] cos\theta \sin \theta d \theta
+$$
 
-Effective (*Le*) or actual (*L*) LAI is calculated from the formula
-depending on whether the logarithm of the arithmetic
-![\`ln(\\overline{P_0(\\theta)})\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60ln%28%5Coverline%7BP_0%28%5Ctheta%29%7D%29%60 "`ln(\overline{P_0(\theta)})`")
-or geometric
-![\`\\overline{ln(P_0(\\theta))}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60%5Coverline%7Bln%28P_0%28%5Ctheta%29%29%7D%60 "`\overline{ln(P_0(\theta))}`")
-mean
-![\`P_0(\\theta)\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60P_0%28%5Ctheta%29%60 "`P_0(\theta)`")
-is considered (see explanation in [Chianucci et
-al. 2019](https://cdnsciencepub.com/doi/10.1139/cjfr-2018-0213)). The
-![\`cos\\theta d\\theta\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60cos%5Ctheta%20d%5Ctheta%60 "`cos\theta d\theta`")
-is normalized to sum as unity.
+Effective (*Le*) or actual (*L*) LAI is calculated from the formula depending on whether the logarithm of the arithmetic $ln(\overline{P_0(\theta)}$ or geometric $\overline{ln(P_0(\theta))}$ mean $P_0(\theta)$ is considered (see explanation in [Chianucci et al. 2019](https://doi.org/10.1139/cjfr-2018-0213). The $cos\theta d\theta$ is normalized to sum as unity.
 
-*Please note that for leaf area inversion, the function replace empty
-gaps (where gap fraction is zero) with a fixed value set to 0.00004530
-(which corresponds to a saturated LAI value of 10) as the logarithm of
-zero gap fraction is not defined.*
+*Please note that for leaf area inversion, the function replace empty gaps (where gap fraction is zero) with a fixed value set to 0.00004530 (which corresponds to a saturated LAI value of 10) as the logarithm of zero gap fraction is not defined.*
 
-Different clumping indices are derived from the `canopy_fisheye()`
-function. The [Lang & Xiang
-(1986)](https://doi.org/10.1016/0168-1923(86)90033-X) (LX) is calculated
-as the ratio of
-![\`Le\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60Le%60 "`Le`")
-to
-![\`L\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60L%60 "`L`")
-derived from the Miller theorem.
+Different clumping indices are derived from the `canopy_fisheye()` function. The [Lang & Xiang (1986)](https://doi.org/10.1016/0168-1923(86)90033-X) (LX) is calculated as the ratio of Le to L derived from the Miller theorem.
 
-Two clumping indices
-![\`(LXG)\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60%28LXG%29%60 "`(LXG)`")
-were derived from an ordered weighted average (OWA) gap fraction (see
-[Chianucci et
-al. 2019](https://cdnsciencepub.com/doi/10.1139/cjfr-2018-0213)):
+Two clumping indices (LXG) were derived from an ordered weighted average (OWA) gap fraction (see [Chianucci et al. 2019](https://doi.org/10.1139/cjfr-2018-0213)):
 
-![\`\\Omega\_{LXG}= \\frac {-\\int\_{0}^{\\pi/2}ln\[\\sum\_{i=1}^{n}w_i^{'}P\_{i\\downarrow}\\theta\]}{{-\\int\_{0}^{\\pi/2}ln\[\\sum\_{i=1}^{n}w_i^{'}P\_{i\\uparrow}\\theta}\]}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60%5COmega_%7BLXG%7D%3D%20%5Cfrac%20%7B-%5Cint_%7B0%7D%5E%7B%5Cpi%2F2%7Dln%5B%5Csum_%7Bi%3D1%7D%5E%7Bn%7Dw_i%5E%7B%27%7DP_%7Bi%5Cdownarrow%7D%5Ctheta%5D%7D%7B%7B-%5Cint_%7B0%7D%5E%7B%5Cpi%2F2%7Dln%5B%5Csum_%7Bi%3D1%7D%5E%7Bn%7Dw_i%5E%7B%27%7DP_%7Bi%5Cuparrow%7D%5Ctheta%7D%5D%7D%60 "`\Omega_{LXG}= \frac {-\int_{0}^{\pi/2}ln[\sum_{i=1}^{n}w_i^{'}P_{i\downarrow}\theta]}{{-\int_{0}^{\pi/2}ln[\sum_{i=1}^{n}w_i^{'}P_{i\uparrow}\theta}]}`"),
-where
-![\`w_i^{'}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60w_i%5E%7B%27%7D%60 "`w_i^{'}`")
-is a normalized, non-increasing weighting vector. The
-![\`cos\\theta d\\theta\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60cos%5Ctheta%20d%5Ctheta%60 "`cos\theta d\theta`")
-is normalized to sum as unity.
+$$
+\Omega_{LXG}= \frac {-\int_{0}^{\pi/2}ln[\sum_{i=1}^{n}w_i^{'}P_{i\downarrow}\theta]cos\theta d\theta}{{-\int_{0}^{\pi/2}ln[\sum_{i=1}^{n}w_i^{'}P_{i\uparrow}\theta}]cos\theta d\theta}
+$$
+
+where w' is a normalized, non-increasing weighting vector. The $cos\theta d\theta$ is normalized to sum as unity.
 
 Two weighting vectors are applied:
 
-![\`w_i^{'}=\\frac{2(n+1-i)}{n(n+1)}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60w_i%5E%7B%27%7D%3D%5Cfrac%7B2%28n%2B1-i%29%7D%7Bn%28n%2B1%29%7D%60 "`w_i^{'}=\frac{2(n+1-i)}{n(n+1)}`"),
-for
-![\`\\Omega\_{LXG1}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60%5COmega_%7BLXG1%7D%60 "`\Omega_{LXG1}`"),
-![\`w_i^{'}= \\frac{1}{n}\\sum\_{j=1}^{n}\\frac{1}{j}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60w_i%5E%7B%27%7D%3D%20%5Cfrac%7B1%7D%7Bn%7D%5Csum_%7Bj%3D1%7D%5E%7Bn%7D%5Cfrac%7B1%7D%7Bj%7D%60 "`w_i^{'}= \frac{1}{n}\sum_{j=1}^{n}\frac{1}{j}`")
-for
-![\`\\Omega\_{LXG2}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60%5COmega_%7BLXG2%7D%60 "`\Omega_{LXG2}`").
+$$
+w_i^{'}=\frac{2(n+1-i)}{n(n+1)}
+$$
 
-The LXG considers both the gap fraction distribution as in LX, and the
-gap magnitude, resulting in higher clumping correction than LX. For
-details, see [Chianucci et
-al. 2019](https://cdnsciencepub.com/doi/10.1139/cjfr-2018-0213)).
+for $\Omega_{LXG1}$ and
 
-Diffuse non-interceptance (*DIFN*) also called *canopy openness* is
-calculated as the mean gap fraction weighted for the ring area, as
-reported in the LAI-2200 manual (Li-Cor Inc., Nebraska US), (Equation 10-25). Unlike LAI-2200 however, DIFN is calculated from the arithmetic mean gap fraction of each ring.
+$$
+w_i^{'}= \frac{1}{n}\sum_{j=1}^{n}\frac{1}{j}
+$$
 
-Additional variables are the mean leaf tilt angle (*MTA.ell*), which is
-calculated from the original formula by [Norman and Campbell
-(1989)](https://link.springer.com/chapter/10.1007/978-94-009-2221-1_14)
-using an Ellipsoidal distribution with one-parameter *x*. The
-ellipsoidal extinction coefficient is given by:
+for $\Omega_{LXG2}$.
 
-![\`k(\\theta,x)=\\frac{\\sqrt{x^2+tan^2(\\theta)}}{x+1.702(x+1.12)^{-0.708}}\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60k%28%5Ctheta%2Cx%29%3D%5Cfrac%7B%5Csqrt%7Bx%5E2%2Btan%5E2%28%5Ctheta%29%7D%7D%7Bx%2B1.702%28x%2B1.12%29%5E%7B-0.708%7D%7D%60 "`k(\theta,x)=\frac{\sqrt{x^2+tan^2(\theta)}}{x+1.702(x+1.12)^{-0.708}}`")
+The LXG considers both the gap fraction distribution as in LX, and the gap magnitude, resulting in higher clumping correction than LX. For details, see [Chianucci et al. 2019](https://doi.org/10.1139/cjfr-2018-0213)).
+
+Diffuse non-interceptance (*DIFN*) also called *canopy openness* is calculated as the mean gap fraction weighted for the ring area, as reported in the LAI-2200 manual (Li-Cor Inc., Nebraska US), (Equation 10-25). Unlike LAI-2200 however, DIFN is calculated from the arithmetic mean gap fraction of each ring.
+
+Additional variables are the mean leaf tilt angle (*MTA.ell*), which is calculated from the original formula by [Norman and Campbell (1989)](https://doi.org/10.1007/978-94-009-2221-1_14) using an Ellipsoidal distribution with one-parameter *x*. The ellipsoidal extinction coefficient is given by:
+
+$$
+k(\theta,x)=\frac{\sqrt{x^{2}+tan^{2}(\theta)}}{x+1.702(x+1.12)^{-0.708}}
+$$
 
 and
-![\`MTA.ell= 90\\times(0.1+0.9 e^{-0.5x})\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60MTA.ell%3D%2090%5Ctimes%280.1%2B0.9%20e%5E%7B-0.5x%7D%29%60 "`MTA.ell= 90\times(0.1+0.9 e^{-0.5x})`")
 
-From the Ellipsoidal distribution function it is also possible to
-calculate the Foliage projection function (G-function;
-![\`G(\\theta)=k(\\theta,x)\\times cos(\\theta)\`](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;%60G%28%5Ctheta%29%3Dk%28%5Ctheta%2Cx%29%5Ctimes%20cos%28%5Ctheta%29%60 "`G(\theta)=k(\theta,x)\times cos(\theta)`"))
-based on the *MTA.ell*:
+$$
+MTA.ell=90\times{(0.1+0.9e^{-0.5x})}
+$$
 
-<img src="man/figures/README-Gell-1.png" width="60%" style="display: block; margin: auto;" />
+From the Ellipsoidal distribution function it is also possible to calculate the Foliage projection function (G-function; $G(\theta)=k(\theta,x)\times cos(\theta)$ based on the *MTA.ell*:
+
+<img src="man/figures/README-Gell-1.png" width="60%" style="display: block; margin: auto;"/>
 
 All these algorithms are applied by simply typing:
 

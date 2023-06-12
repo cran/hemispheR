@@ -67,7 +67,7 @@ c.im |>
 \seealso{
 Lens correction functions have been retrieved from the following sources:
 
-Pekin and Macfarlane 2009: \url{https://www.mdpi.com/13056}
+Pekin and Macfarlane 2009: \doi{10.3390/rs1041298}
 
 Paul Bourke:\url{http://www.paulbourke.net/dome/fisheyecorrect/}
 
