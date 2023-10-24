@@ -25,21 +25,21 @@ c.im<-system.file('extdata/circular_coolpix4500+FC-E8_chestnut.jpg',package='hem
 c.im |>
   import_fisheye(circ.mask=camera_fisheye('Coolpix4500+FC-E8')) |>
   binarize_fisheye() |>
-  gapfrac_fisheye(lens='FC-E8',nrings=7,nseg=8,endVZA=70,display=TRUE) |>
+  gapfrac_fisheye(lens='FC-E8',nrings=7,nseg=8,endVZA=70) |>
   canopy_fisheye()
 
 #Zenith rings similar to LAI-2000/2200:
 c.im |>
  import_fisheye(circ.mask=camera_fisheye('Coolpix4500+FC-E8')) |>
   binarize_fisheye() |>
-  gapfrac_fisheye(lens='FC-E8',nrings=5,nseg=8,endVZA=75,display=TRUE) |>
+  gapfrac_fisheye(lens='FC-E8',nrings=5,nseg=8,endVZA=75) |>
   canopy_fisheye()
 
 #The hinge angle method close to 1 radian (57 degree):
 c.im |>
  import_fisheye(circ.mask=camera_fisheye('Coolpix4500+FC-E8')) |>
   binarize_fisheye() |>
-  gapfrac_fisheye(lens='FC-E8',nrings=1,nseg=8,startVZA=55,endVZA=60,display=TRUE) |>
+  gapfrac_fisheye(lens='FC-E8',nrings=1,nseg=8,startVZA=55,endVZA=60) |>
   canopy_fisheye()
 }
 }

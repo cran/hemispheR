@@ -1,14 +1,13 @@
 #' @name gapfrac_fisheye
 #' @aliases gapfrac_fisheye list.lenses
 #' @title Derive angular gap fraction from a classified fisheye image
-#' @importFrom raster raster getValues rasterToPoints
+#' @importFrom terra rast values as.data.frame metags plot
 #' @importFrom dplyr group_by nth right_join summarise mutate relocate ungroup select filter case_when bind_rows
+#' @importFrom dismo circles
 #' @importFrom tidyr pivot_wider
-#' @importFrom rlang .data
 #' @importFrom graphics segments
-#' @importFrom plotrix draw.circle
 #'
-#' @param img.bw Raster. A binary fisheye image generated from [binarize_fisheye()].
+#' @param img.bw SpatLayer. A binary, single-layer fisheye image generated from [binarize_fisheye()].
 #' @param maxVZA Numeric. The maximum Zenith angle (in degrees) corresponding to the image radius. Default= 90.
 #' @param lens Character. The lens type for fisheye-lens correction. A list of lenses is available by typing *list.lenses*. If missing, it is assumed equidistant.
 #' @param startVZA Numeric. The minimum Zenith angle (in degrees) considered in the analysis. Default is 0.
@@ -57,33 +56,38 @@
 #'
 #'
 #' @export
+gapfrac_fisheye <- function(img.bw,maxVZA=90,lens='equidistant',startVZA=0,endVZA=70,nrings=7,nseg=8,message=FALSE,display=FALSE){
 
-gapfrac_fisheye<-function(img.bw,maxVZA=90,lens='equidistant',startVZA=0,endVZA=70,nrings=7,nseg=8,message=FALSE,display=FALSE){
+r <- ring <- theta <- alpha.to <- value <- alpha.from <- id <- NULL
 
-  if (length(setdiff(unique(raster::getValues(img.bw)),
-                     c(NA,0, 1))) > 0)
+  if (length(setdiff(unique(terra::values(img.bw)),
+                     c(NA,0, 1))) > 0){
     stop("Error: please select a binary (0,1) fisheye image, which can be classified using the binarize_fisheye() function")
-
-  if (length(setdiff(c(0,1),unique(raster::getValues(img.bw))))>0)
+  }
+  if (length(setdiff(c(0,1),
+                     unique(terra::values(img.bw))))>0){
     stop("Error: only 0 or 1 is contained in the binary image, calculation of gap fraction is not possible")
+    }
 
 
 
-  metadata<-dplyr::bind_rows(unlist(img.bw@data@attributes))
-  imgdf<-data.frame(raster::rasterToPoints(img.bw))
+
+  # p<-terra::as.points(img.bw, values=TRUE)
+  # imgdf <- cbind(terra::crds(p), terra::values(p))
+  imgdf<-terra::as.data.frame(img.bw, xy=TRUE)
   base::names(imgdf)<-c('x','y','value')
 
   #calculate back xc,yc,rc:
   xc=round(mean(imgdf$x))
   yc=round(mean(imgdf$y))
 
-  if(length(unique(raster::getValues(img.bw)))==2){
+  if(length(unique(terra::values(img.bw)))==2){
     rc=round(sqrt(xc^2+yc^2))-2
     if(message==TRUE){
       message(paste('Used parameters xc, yc and rc are',xc,yc,rc,sep=", "))
     }}
 
-  if(length(unique(raster::getValues(img.bw)))==3){
+  if(length(unique(terra::values(img.bw)))==3){
     rc=round((max(imgdf$x)-min(imgdf$x))/2)
     if(message==TRUE){
       message(paste('Used parameters xc, yc and rc are',xc,yc,rc,sep=", "))
@@ -105,7 +109,7 @@ gapfrac_fisheye<-function(img.bw,maxVZA=90,lens='equidistant',startVZA=0,endVZA=
   endVZA=endVZA
   maxVZA=maxVZA
 
-  # 9 zenith rings
+  # no. zenith rings
   nrings=nrings
 
   list.lenses<-c("equidistant","orthographic","stereographic","equisolid", sort(c("FC-E8","FC-E9","Sigma-4.5","Nikkor-OP10","Nikkor-10.5","Sigma-8","Nikkor-8","Soligor","Raynox-CF185","CanonEF-8-15","Kodak-SP360","Entaniya-M12-280","Canon-RF-5.2","Entaniya-HAL-200","Entaniya-HAL-250","Entaniya-M12-250","Entaniya-M12-220","Meike-3.5","Meike-6.5","Laowa-4","iZugar-MKX200","iZugar-MKX22","iZugar-MKX13","iZugar-MKX19","DZO-VRCA","Sunex-DSL315","Sunex-DSL239","Sunex-DSL415","Sunex-DSLR01","Lensagon-BF10M14522S118","Lensagon-BF16M220D","Omnitech-ORIFL190-3","Aico-ACHIR01028B10M","Aico-ACHIR01420B9M","SMTEC-SL-190","Evetar-E3307","Evetar-E3267A","Evetar-E3279","ArduCam-M25156H18","Bosch-Flexidome-7000")))
@@ -392,39 +396,45 @@ gapfrac_fisheye<-function(img.bw,maxVZA=90,lens='equidistant',startVZA=0,endVZA=
   options(dplyr.summarise.inform=FALSE)
 
   rdf<-imgdf |>
-    dplyr::mutate(ring=cut(.data$r,rset,include.lowest=TRUE,labels=seq(startVZA+((endVZA-startVZA)/2/nrings),endVZA-((endVZA-startVZA)/2/nrings),(endVZA-startVZA)/nrings)))|>
-    # dplyr::mutate(ring=cut(.data$r,rset,include.lowest=TRUE,labels=seq(setVZA/nrings,setVZA,setVZA/nrings)))|>
-    tidyr::drop_na(.data$ring) |>
-    dplyr::mutate(ring=as.numeric(as.character(.data$ring))) |>
-    dplyr::mutate(alpha.to=cut(.data$theta,seq(0,2*pi,2*pi/nseg)*180/pi,include.lowest=TRUE,labels=rep(seq(2*pi/nseg,2*pi,2*pi/nseg))*180/pi)) |>
-    dplyr::mutate(alpha.to=as.numeric(as.character(.data$alpha.to))) |>
-    dplyr::group_by(.data$ring,.data$alpha.to) |>
-    dplyr::summarise(GF=mean(.data$value,na.rm=TRUE)) |>
+    dplyr::mutate(ring=cut(r,rset,include.lowest=TRUE,labels=seq(startVZA+((endVZA-startVZA)/2/nrings),endVZA-((endVZA-startVZA)/2/nrings),(endVZA-startVZA)/nrings)))|>
+    # dplyr::mutate(ring=cut(r,rset,include.lowest=TRUE,labels=seq(setVZA/nrings,setVZA,setVZA/nrings)))|>
+    tidyr::drop_na(ring) |>
+    dplyr::mutate(ring=as.numeric(as.character(ring))) |>
+    dplyr::mutate(alpha.to=cut(theta,seq(0,2*pi,2*pi/nseg)*180/pi,include.lowest=TRUE,labels=rep(seq(2*pi/nseg,2*pi,2*pi/nseg))*180/pi)) |>
+    dplyr::mutate(alpha.to=as.numeric(as.character(alpha.to))) |>
+    dplyr::group_by(ring,alpha.to) |>
+    dplyr::summarise(GF=mean(value,na.rm=TRUE)) |>
     dplyr::ungroup() |>
-    dplyr::mutate(alpha.from=rep(seq(0,2*pi-pi/nseg,2*pi/nseg)*180/pi,nrings))|>
+    dplyr::mutate(alpha.from=alpha.to-45)|>
     # dplyr::mutate(GF=dplyr::case_when(
-    #   .data$GF==0~dplyr::nth(sort(unique(.data$GF)),2),
-    #   # .data$GF==0~0.00004530,
-    #   TRUE~.data$GF
+    #   GF==0~dplyr::nth(sort(unique(GF)),2),
+    #   # GF==0~0.00004530,
+    #   TRUE~GF
     # )) |>
-    dplyr::relocate(.data$ring,.data$alpha.from)
+    dplyr::relocate(ring,alpha.from)
 
   rdfw<-rdf |>
-    tidyr::pivot_wider(id_cols=.data$ring,names_from=c('alpha.from','alpha.to'),values_from='GF',names_prefix='GF') |>
+    tidyr::pivot_wider(id_cols=ring,names_from=c('alpha.from','alpha.to'),values_from='GF',names_prefix='GF') |>
     dplyr::mutate(id=base::names(img.bw),lens=lens) |>
     dplyr::mutate(circ=paste(xc,yc,rc, sep='_')) |>
-    dplyr::relocate(.data$id) |>
+    dplyr::relocate(id) |>
     dplyr::ungroup()
 
+  metadata <- terra::metags(img.bw)
   if (length(setdiff(c('channel','stretch','gamma','zonal','thd','method'),names(metadata)))>0){
     metadata=data.frame(channel=NA,stretch=NA,gamma=NA,zonal=NA,thd=NA,method=NA)
   }
 
-  rdfw<-cbind(rdfw,metadata)
+  metadf <- as.data.frame(t(metadata))
+  rdfw<-cbind(rdfw,metadf)
 
   if (display==TRUE){
-    raster::plot(img.bw,col=c('black','white'), main='applied rings & segments',legend=FALSE)
-    plotrix::draw.circle(xc,yc,rset,border='yellow',lwd=3)
+    terra::plot(img.bw,col=c('black','white'), main='applied rings & segments',legend=FALSE)
+    #TODO
+    for (j in 1:length(rset)){
+    dd <- dismo::circles(cbind(xc,yc), rset[j], lonlat=F)
+    plot(dd,  add=TRUE, border='yellow', lwd=3)
+    }
     slices<-seq(pi/nseg,2*pi,2*pi/nseg)
     for (i in 1:length(slices)){
       graphics::segments(xc,yc,xc+max(rset)*sin(slices[i]),yc+max(rset)*cos(slices[i]),col='yellow',lwd=3)

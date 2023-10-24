@@ -7,18 +7,18 @@
 zonal_mask(img)
 }
 \arguments{
-\item{img}{Raster. The input raster image}
+\item{img}{SpatRaster. The input single layer image generated from \code{\link[terra:rast]{terra::rast()}}.}
 }
 \value{
 A 4-layers stacks of image masks
 }
 \description{
-This function imports a raster image using \code{\link[raster:raster]{raster::raster()}} functionality, and divide into four masks, using the image centre and borders as vertices.
-The four zonal masks are then returned as a raster stack.
+This function imports a SpatRaster image using \code{\link[terra:rast]{terra::rast()}} functionality, and divide into four masks, using the image centre and borders as vertices.
+The four zonal masks are then returned as a RasterStack.
 }
 \examples{
 image<-system.file('extdata/circular_coolpix4500+FC-E8_chestnut.jpg',package='hemispheR')
-zmsk<-zonal_mask(raster::raster(image))
-raster::plot(zmsk,col=gray.colors(5),main=c('N','W','S','E'))
+zmsk<-zonal_mask(terra::rast(image, lyrs=3))
+terra::plot(zmsk,col=gray.colors(5),main=c('N','W','S','E'))
 
 }

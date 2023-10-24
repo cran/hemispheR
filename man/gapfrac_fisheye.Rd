@@ -18,7 +18,7 @@ gapfrac_fisheye(
 )
 }
 \arguments{
-\item{img.bw}{Raster. A binary fisheye image generated from \code{\link[=binarize_fisheye]{binarize_fisheye()}}.}
+\item{img.bw}{SpatLayer. A binary, single-layer fisheye image generated from \code{\link[=binarize_fisheye]{binarize_fisheye()}}.}
 
 \item{maxVZA}{Numeric. The maximum Zenith angle (in degrees) corresponding to the image radius. Default= 90.}
 

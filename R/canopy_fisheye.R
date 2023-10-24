@@ -3,7 +3,6 @@
 #' @title Calculate canopy attributes from angular gap fraction data derived from fisheye images
 #' @param rdfw Dataframe. The input dataframe generated from [gapfrac_fisheye()], which contains gap fraction for zenith and azimuth bins.
 #'
-#' @importFrom rlang .data
 #' @importFrom dplyr mutate group_by summarise select relocate contains across
 #'
 #' @return A dataframe of canopy attributes from classified fisheye images.
@@ -20,21 +19,21 @@
 #' c.im |>
 #'   import_fisheye(circ.mask=camera_fisheye('Coolpix4500+FC-E8')) |>
 #'   binarize_fisheye() |>
-#'   gapfrac_fisheye(lens='FC-E8',nrings=7,nseg=8,endVZA=70,display=TRUE) |>
+#'   gapfrac_fisheye(lens='FC-E8',nrings=7,nseg=8,endVZA=70) |>
 #'   canopy_fisheye()
 #'
 #' #Zenith rings similar to LAI-2000/2200:
 #' c.im |>
 #'  import_fisheye(circ.mask=camera_fisheye('Coolpix4500+FC-E8')) |>
 #'   binarize_fisheye() |>
-#'   gapfrac_fisheye(lens='FC-E8',nrings=5,nseg=8,endVZA=75,display=TRUE) |>
+#'   gapfrac_fisheye(lens='FC-E8',nrings=5,nseg=8,endVZA=75) |>
 #'   canopy_fisheye()
 #'
 #' #The hinge angle method close to 1 radian (57 degree):
 #' c.im |>
 #'  import_fisheye(circ.mask=camera_fisheye('Coolpix4500+FC-E8')) |>
 #'   binarize_fisheye() |>
-#'   gapfrac_fisheye(lens='FC-E8',nrings=1,nseg=8,startVZA=55,endVZA=60,display=TRUE) |>
+#'   gapfrac_fisheye(lens='FC-E8',nrings=1,nseg=8,startVZA=55,endVZA=60) |>
 #'   canopy_fisheye()
 #' }
 #' @seealso
@@ -53,6 +52,11 @@
 # utils::globalVariables('.')
 
 canopy_fisheye<-function(rdfw){
+
+ring <- sinth <- costh <- name <- value <- wa2.3 <- wr2.3 <- wa3.4 <- wr3.4 <- NULL
+valuea2.3 <- valuer2.3 <- valuea3.4 <- valuer3.4 <- LXG1 <- LXG2 <- NULL
+w <- GapFr <- W <- id <- Le <- L <- DIFN <- LX <- NULL
+
 
   setVZA=paste0(unique(rdfw$ring),collapse= '_')
   nrings=length(unique(rdfw$ring))
@@ -82,9 +86,9 @@ canopy_fisheye<-function(rdfw){
     dplyr::mutate(dplyr::across(dplyr::starts_with('GF'), ~ifelse(.==0,0.00004530,.))) |>
     # dplyr::mutate(CNTCT=rowMeans(-log(dplyr::select(.,contains('GF'))))*cos(ring*pi/180)) |> # working after magrittr's %>%
     dplyr::mutate(GapFr=rowMeans(dplyr::across(dplyr::contains('GF'))))   |>
-    dplyr::mutate(costh=cos(.data$ring*pi/180),sinth=sin(.data$ring*pi/180)) |>
-    dplyr::mutate(w=.data$sinth/sum(sin(unique(.data$ring)*pi/180))) |>
-    dplyr::mutate(W=.data$sinth*.data$costh/sum(.data$sinth*.data$costh)/2)
+    dplyr::mutate(costh=cos(ring*pi/180),sinth=sin(ring*pi/180)) |>
+    dplyr::mutate(w=sinth/sum(sin(unique(ring)*pi/180))) |>
+    dplyr::mutate(W=sinth*costh/sum(sinth*costh)/2)
 
 
   # Not included as output:
@@ -156,30 +160,30 @@ canopy_fisheye<-function(rdfw){
   w3.4<-rcumsum((1/1:n)/n)
 
   LXG<-Gaps |>
-    dplyr::select(.data$ring,contains('GF')) |>
-    tidyr::pivot_longer(-.data$ring) |>
-    dplyr::select(-.data$name) |>
-    dplyr::arrange(.data$ring,dplyr::desc(.data$value)) |>
+    dplyr::select(ring,contains('GF')) |>
+    tidyr::pivot_longer(-ring) |>
+    dplyr::select(-name) |>
+    dplyr::arrange(ring,dplyr::desc(value)) |>
     dplyr::mutate(wa2.3=rep(w2.3,nrings),wr2.3=rep(rev(w2.3),nrings)) |>
     dplyr::mutate(wa3.4=rep(w3.4,nrings),wr3.4=rep(rev(w3.4),nrings)) |>
-    dplyr::mutate(valuea2.3=.data$value*.data$wa2.3,valuer2.3=.data$value*.data$wr2.3) |>
-    dplyr::mutate(valuea3.4=.data$value*.data$wa3.4,valuer3.4=.data$value*.data$wr3.4) |>
-    dplyr::group_by(.data$ring) |>
-    dplyr::summarise(LXG1=log(sum(.data$valuea2.3,na.rm = T))/log(sum(.data$valuer2.3,na.rm = T)),
-                     LXG2=log(sum(.data$valuea3.4,na.rm = T))/log(sum(.data$valuer3.4,na.rm = T))) |>
-    dplyr::mutate(w=sin(.data$ring*pi/180)/sum(sin(unique(.data$ring)*pi/180))) |>
-    dplyr::summarise(LXG1=sum(.data$LXG1*.data$w,na.rm=T),LXG2=sum(.data$LXG2*.data$w,na.rm=T))
+    dplyr::mutate(valuea2.3=value*wa2.3,valuer2.3=value*wr2.3) |>
+    dplyr::mutate(valuea3.4=value*wa3.4,valuer3.4=value*wr3.4) |>
+    dplyr::group_by(ring) |>
+    dplyr::summarise(LXG1=log(sum(valuea2.3,na.rm = T))/log(sum(valuer2.3,na.rm = T)),
+                     LXG2=log(sum(valuea3.4,na.rm = T))/log(sum(valuer3.4,na.rm = T))) |>
+    dplyr::mutate(w=sin(ring*pi/180)/sum(sin(unique(ring)*pi/180))) |>
+    dplyr::summarise(LXG1=sum(LXG1*w,na.rm=T),LXG2=sum(LXG2*w,na.rm=T))
 
   Canopy<-Gaps |>
-    dplyr::mutate(Le=-log(.data$GapFr)*.data$w*.data$costh) |>
-    dplyr::mutate(L=rowMeans(-log(dplyr::across(contains('GF'))))*.data$w*.data$costh) |>
-    # dplyr::mutate(L=rowMeans(-log(dplyr::select(.,contains('GF'))))*.data$w*.data$costh) |> # working after magrittr's %>%
-    dplyr::mutate(DIFN=rowMeans(dplyr::across(contains('GF')))*2*.data$W) |>
-    dplyr::group_by(.data$id) |>
-    dplyr::summarise(Le=round(2*sum(.data$Le,na.rm=T),2),L=round(2*sum(.data$L,na.rm=T),2),LX=round(.data$Le/.data$L,2),DIFN=round(sum(.data$DIFN,na.rm=T)*100,3)) |>
+    dplyr::mutate(Le=-log(GapFr)*w*costh) |>
+    dplyr::mutate(L=rowMeans(-log(dplyr::across(contains('GF'))))*w*costh) |>
+    # dplyr::mutate(L=rowMeans(-log(dplyr::select(.,contains('GF'))))*$w*costh) |> # working after magrittr's %>%
+    dplyr::mutate(DIFN=rowMeans(dplyr::across(contains('GF')))*2*W) |>
+    dplyr::group_by(id) |>
+    dplyr::summarise(Le=round(2*sum(Le,na.rm=T),2),L=round(2*sum(L,na.rm=T),2),LX=round(Le/L,2),DIFN=round(sum(DIFN,na.rm=T)*100,3)) |>
     dplyr::mutate(VZA=setVZA,rings=nrings,azimuths=nseg,x=round(x,2),MTA.ell=MTA.ell,LXG1=round(LXG$LXG1,2),LXG2=round(LXG$LXG2,2),
                   mask=circ,lens=lens,channel=channel,stretch=stretch,gamma=gamma,zonal=zonal,method=method,thd=thd) |>
-    dplyr::relocate(.data$id,.data$Le:.data$LX,.data$LXG1,.data$LXG2,.data$DIFN,.data$MTA.ell,.data$x)
+    dplyr::relocate(id,Le:LX,LXG1,LXG2,DIFN,MTA.ell,x)
 
   return(Canopy)
 }

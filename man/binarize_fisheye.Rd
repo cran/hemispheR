@@ -14,7 +14,7 @@ binarize_fisheye(
 )
 }
 \arguments{
-\item{img}{Raster. Fisheye image imported by \code{\link[=import_fisheye]{import_fisheye()}} as a single-band raster using the \code{\link[raster:raster]{raster::raster()}} functionality.}
+\item{img}{SpatRaster. A single layer fisheye image imported by \code{\link[=import_fisheye]{import_fisheye()}} using the \code{\link[terra:rast]{terra::rast()}} functionality.}
 
 \item{method}{Character. The method used to threshold the image, using the \code{\link[autothresholdr:auto_thresh]{autothresholdr::auto_thresh()}} function. For details, see \url{https://imagej.net/plugins/auto-threshold}. Default = 'Otsu'.}
 
@@ -27,7 +27,7 @@ binarize_fisheye(
 \item{export}{Logical. If is set to TRUE, it saves the binary fisheye image as tif file. Default to FALSE.}
 }
 \value{
-A binary raster image
+A binary single-layer image (SpatRaster)
 }
 \description{
 The function calculates a single threshold of a single-channel raster image using  the \code{\link[autothresholdr:auto_thresh]{autothresholdr::auto_thresh()}} functionality.

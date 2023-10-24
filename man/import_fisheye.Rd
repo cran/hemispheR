@@ -34,10 +34,10 @@ import_fisheye(
 \item{message}{Logical. If is set to TRUE, it prints the mask used for importing the image. Default to TRUE.}
 }
 \value{
-A single-channel raster image.
+A single-channel image (SpatRaster).
 }
 \description{
-This function imports fisheye images using \code{\link[raster:raster]{raster::raster()}} functionality, by selecting a single channel, or a combination of channels.
+This function imports fisheye images using \code{\link[terra:rast]{terra::rast()}} functionality, by selecting a single channel, or a combination of channels.
 The default option (blue channel) is generally preferred for canopy image analysis as it enables high contrast between canopy and sky pixels, which ease image thresholding.
 A circular mask is then applied to mask outside pixel in case of circular fisheye images. It can be manually inserted, or retrieved using the \code{\link[=camera_fisheye]{camera_fisheye()}} function.
 Alternatively, it is automatically calculated. Additional functions include a gamma correction and a contrast stretch.
@@ -46,12 +46,12 @@ Alternatively, it is automatically calculated. Additional functions include a ga
 \donttest{
 c.im<-system.file('extdata/circular_coolpix4500+FC-E8_chestnut.jpg',package='hemispheR')
 
+#set the circular mask automatically:
+import_fisheye(c.im,circ.mask=list(xc=1136,yc=850,rc=754),channel='B',gamma=2.2,display=TRUE)
+
 #list of cameras for circular mask:
 list.cameras
 
-#set the circular mask automatically:
-import_fisheye(c.im,circ.mask=list(xc=1136,yc=850,rc=754),channel='B',gamma=2.2,display=TRUE)
-f.im<-system.file('extdata/fullframe_D90_Nikkor-10.5_beech.jpg',package='hemispheR')
 #set the circular mask using camera_fisheye():
 import_fisheye(c.im,circ.mask=camera_fisheye('Coolpix4500+FC-E8'), gamma=2.2)
 
@@ -59,6 +59,7 @@ import_fisheye(c.im,circ.mask=camera_fisheye('Coolpix4500+FC-E8'), gamma=2.2)
 import_fisheye(c.im,channel='B',gamma=2.2,display=TRUE)
 
 #import a fullframe image:
+f.im<-system.file('extdata/fullframe_D90_Nikkor-10.5_beech.jpg',package='hemispheR')
 import_fisheye(f.im,circular=FALSE,channel='B',gamma=2.2,display=TRUE)
 }
 }
