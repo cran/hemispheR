@@ -36,7 +36,8 @@
 #' Hemisfer: <https://www.schleppi.ch/patrick/hemisfer/index.php>
 #'
 #' @examples
-#' \donttest{c.im<-system.file('extdata/circular_coolpix4500+FC-E8_chestnut.jpg',package='hemispheR')
+#' \donttest{
+#' c.im<-system.file('extdata/circular_coolpix4500+FC-E8_chestnut.jpg',package='hemispheR')
 #'
 #' #List of lenses for fisheye projection correction:
 #' list.lenses
@@ -53,10 +54,15 @@
 #'   binarize_fisheye() |>
 #'   gapfrac_fisheye(lens='FC-E8',nrings=1,nseg=8,startVZA=55,endVZA=60,display=TRUE)
 #' }
-#'
-#'
 #' @export
-gapfrac_fisheye <- function(img.bw,maxVZA=90,lens='equidistant',startVZA=0,endVZA=70,nrings=7,nseg=8,message=FALSE,display=FALSE){
+gapfrac_fisheye <- function(img.bw,maxVZA=90,
+                            lens='equidistant',
+                            startVZA=0,
+                            endVZA=70,
+                            nrings=7,
+                            nseg=8,
+                            message=FALSE,
+                            display=FALSE){
 
 r <- ring <- theta <- alpha.to <- value <- alpha.from <- id <- NULL
 
@@ -421,11 +427,20 @@ r <- ring <- theta <- alpha.to <- value <- alpha.from <- id <- NULL
     dplyr::ungroup()
 
   metadata <- terra::metags(img.bw)
-  if (length(setdiff(c('channel','stretch','gamma','zonal','thd','method'),names(metadata)))>0){
-    metadata=data.frame(channel=NA,stretch=NA,gamma=NA,zonal=NA,thd=NA,method=NA)
+
+  if (length(setdiff(c('channel','stretch','gamma','zonal','thd','method'),
+                     names(metadata)))>0){
+    dif <- setdiff(c('channel','stretch','gamma','zonal','thd','method'),
+                    names(metadata))
+    metadf=data.frame(channel=NA,stretch=NA,gamma=NA,zonal=NA,thd=NA,method=NA)
+    w=2
+    for (w in 1:length(dif)){
+    metadf[names(metadf) == names(metadata)[w]] <-metadata[names(metadata)[w]]
+    }
+  } else {
+    metadf <- as.data.frame(t(metadata))
   }
 
-  metadf <- as.data.frame(t(metadata))
   rdfw<-cbind(rdfw,metadf)
 
   if (display==TRUE){

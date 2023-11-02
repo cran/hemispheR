@@ -14,12 +14,13 @@ A dataframe of canopy attributes from classified fisheye images.
 }
 \description{
 The function calculate canopy attributes from angular distribution of gap fraction.
-It returns both the effective (Le) and actual (L) leaf area index following the \href{https://www.publish.csiro.au/BT/BT9670141}{Miller theorem (1967)}.
-The \href{https://www.sciencedirect.com/science/article/pii/016819238690033X}{Lang and Xiang (1986)} clumping index LX is calculated as the ratio of Le to L;  two additional clumping indices (LXG1, LXG2) are derived from ordered weighted average gap fraction as in \href{https://cdnsciencepub.com/doi/10.1139/cjfr-2018-0213}{Chianucci et al. 2019}.
-The mean leaf angle (MTA) and the ellipsoidal x are derived from \href{https://link.springer.com/chapter/10.1007/978-94-009-2221-1_14}{Norman and Campbell (1989)}.
+It returns both the effective (Le) and actual (L) leaf area index following the Miller theorem (1967).
+The Lang and Xiang (1986) clumping index LX is calculated as the ratio of Le to L;  two additional clumping indices (LXG1, LXG2) are derived from ordered weighted average gap fraction as in Chianucci et al. (2019).
+The mean leaf angle (MTA) and the ellipsoidal x are derived from Norman and Campbell (1989).
 Canopy openness is also provided as weighted diffuse non-interceptance (DIFN), following the LAI-2200 manual (Li-Cor Inc., Nebraska US).
 }
 \examples{
+
 \donttest{
 c.im<-system.file('extdata/circular_coolpix4500+FC-E8_chestnut.jpg',package='hemispheR')
 c.im |>
@@ -48,7 +49,7 @@ Chianucci F., Zou J., Leng P., Zhuang Y., Ferrara C. 2019. A new method to estim
 \cr
 LAI-2200C Plant Canopy Analyzer - Instruction Manuals. Licor.\cr
 \cr
-Lang A.R.G., Xiang Y. 1986. Estimation of leaf area index from transmission of direct sunlight in discontinuous canopies. Agricultural and Forest Meteorology 37, 228-243. \url{https://www.sciencedirect.com/science/article/pii/016819238690033X} \cr
+Lang A.R.G., Xiang Y. 1986. Estimation of leaf area index from transmission of direct sunlight in discontinuous canopies. Agricultural and Forest Meteorology 37, 228-243. \doi{10.1016/0168-1923(86)90033-X} \cr
 \cr
 Miller J.B. 1967. A formula for average foliage density. Australian Journal of Botany 15(1) 141 - 144. \doi{10.1071/BT9670141} .\cr
 \cr

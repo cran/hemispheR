@@ -44,7 +44,8 @@ The function calculates the gap fraction for a number of zenith annuli (rings) a
 A list of lens is available for correcting for lens distorsion. Type 'list.lenses'.
 }
 \examples{
-\donttest{c.im<-system.file('extdata/circular_coolpix4500+FC-E8_chestnut.jpg',package='hemispheR')
+\donttest{
+c.im<-system.file('extdata/circular_coolpix4500+FC-E8_chestnut.jpg',package='hemispheR')
 
 #List of lenses for fisheye projection correction:
 list.lenses
@@ -61,8 +62,6 @@ c.im |>
   binarize_fisheye() |>
   gapfrac_fisheye(lens='FC-E8',nrings=1,nseg=8,startVZA=55,endVZA=60,display=TRUE)
 }
-
-
 }
 \seealso{
 Lens correction functions have been retrieved from the following sources:
