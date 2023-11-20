@@ -1,3 +1,6 @@
+# hemispheR 1.1.0
+- Fixed a bug in naming `GF` cols in `gapfrac_fisheye()` function & display segments
+
 # hemispheR 1.0.1
 - There is an issue with a extdata/fullframe image, fixed
 - Read metadata in gapfrac_fisheye()

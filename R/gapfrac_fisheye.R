@@ -55,7 +55,8 @@
 #'   gapfrac_fisheye(lens='FC-E8',nrings=1,nseg=8,startVZA=55,endVZA=60,display=TRUE)
 #' }
 #' @export
-gapfrac_fisheye <- function(img.bw,maxVZA=90,
+gapfrac_fisheye <- function(img.bw,
+                            maxVZA=90,
                             lens='equidistant',
                             startVZA=0,
                             endVZA=70,
@@ -64,7 +65,7 @@ gapfrac_fisheye <- function(img.bw,maxVZA=90,
                             message=FALSE,
                             display=FALSE){
 
-r <- ring <- theta <- alpha.to <- value <- alpha.from <- id <- NULL
+  r <- ring <- theta <- alpha.to <- value <- alpha.from <- id <- NULL
 
   if (length(setdiff(unique(terra::values(img.bw)),
                      c(NA,0, 1))) > 0){
@@ -73,7 +74,7 @@ r <- ring <- theta <- alpha.to <- value <- alpha.from <- id <- NULL
   if (length(setdiff(c(0,1),
                      unique(terra::values(img.bw))))>0){
     stop("Error: only 0 or 1 is contained in the binary image, calculation of gap fraction is not possible")
-    }
+  }
 
 
 
@@ -407,11 +408,11 @@ r <- ring <- theta <- alpha.to <- value <- alpha.from <- id <- NULL
     tidyr::drop_na(ring) |>
     dplyr::mutate(ring=as.numeric(as.character(ring))) |>
     dplyr::mutate(alpha.to=cut(theta,seq(0,2*pi,2*pi/nseg)*180/pi,include.lowest=TRUE,labels=rep(seq(2*pi/nseg,2*pi,2*pi/nseg))*180/pi)) |>
-    dplyr::mutate(alpha.to=as.numeric(as.character(alpha.to))) |>
+    dplyr::mutate(alpha.to=trunc(as.numeric(as.character(alpha.to)))) |>
     dplyr::group_by(ring,alpha.to) |>
     dplyr::summarise(GF=mean(value,na.rm=TRUE)) |>
     dplyr::ungroup() |>
-    dplyr::mutate(alpha.from=alpha.to-45)|>
+    dplyr::mutate(alpha.from=alpha.to-floor(as.numeric(as.character(((2*pi/nseg)*180/pi)))))|>
     # dplyr::mutate(GF=dplyr::case_when(
     #   GF==0~dplyr::nth(sort(unique(GF)),2),
     #   # GF==0~0.00004530,
@@ -431,11 +432,11 @@ r <- ring <- theta <- alpha.to <- value <- alpha.from <- id <- NULL
   if (length(setdiff(c('channel','stretch','gamma','zonal','thd','method'),
                      names(metadata)))>0){
     dif <- setdiff(c('channel','stretch','gamma','zonal','thd','method'),
-                    names(metadata))
+                   names(metadata))
     metadf=data.frame(channel=NA,stretch=NA,gamma=NA,zonal=NA,thd=NA,method=NA)
     w=2
     for (w in 1:length(dif)){
-    metadf[names(metadf) == names(metadata)[w]] <-metadata[names(metadata)[w]]
+      metadf[names(metadf) == names(metadata)[w]] <-metadata[names(metadata)[w]]
     }
   } else {
     metadf <- as.data.frame(t(metadata))
@@ -447,10 +448,11 @@ r <- ring <- theta <- alpha.to <- value <- alpha.from <- id <- NULL
     terra::plot(img.bw,col=c('black','white'), main='applied rings & segments',legend=FALSE)
     #TODO
     for (j in 1:length(rset)){
-    dd <- dismo::circles(cbind(xc,yc), rset[j], lonlat=F)
-    plot(dd,  add=TRUE, border='yellow', lwd=3)
+      dd <- dismo::circles(cbind(xc,yc), rset[j], lonlat=F)
+      plot(dd,  add=TRUE, border='yellow', lwd=3)
     }
-    slices<-seq(pi/nseg,2*pi,2*pi/nseg)
+    # slices<-seq(pi/nseg,2*pi,2*pi/nseg)
+    slices <-seq(0,2*pi,2*pi/nseg)
     for (i in 1:length(slices)){
       graphics::segments(xc,yc,xc+max(rset)*sin(slices[i]),yc+max(rset)*cos(slices[i]),col='yellow',lwd=3)
     }

@@ -1,11 +1,11 @@
-30cc9443b630677d6aafd23441d1563d *DESCRIPTION
+18f1a40c0012a6a66d95fff74cac4eda *DESCRIPTION
 52e53c39c63be08eb5cc34ed674abb43 *LICENSE
 7d9a1d6474b4b66e51e0a5ad8e5885ba *NAMESPACE
-e242f5c4140ec9690c5d25df4d2087e6 *NEWS.md
+8d0e2d578fadfc5ae7e9e9a47dc1c464 *NEWS.md
 8c8beb9ed37faa189e759bf2bf205089 *R/binarize_fisheye.R
 3dcb36d1996601231bfb7cd75dce3f5f *R/camera_fisheye.R
 2e3c08fde7f78bb06de75a89171eee72 *R/canopy_fisheye.R
-605ffec2dc7a5057b0c4e17b5b3002b1 *R/gapfrac_fisheye.R
+13dfdcf514b9de8024b5a82e9f82af46 *R/gapfrac_fisheye.R
 df6cc46bc7fae1a55b713f3d5065b35a *R/hemispheR-package.R
 f80abed62797483c67e8e1e2d8ab8e0b *R/import_fisheye.R
 8b5f522aa5d4c8d823ade874a631473e *R/zonal_mask.R
@@ -23,6 +23,7 @@ f80abed62797483c67e8e1e2d8ab8e0b *R/import_fisheye.R
 8cd65be78d7de16b712e435f6faa8797 *man/binarize_fisheye.Rd
 5ee8a2d8c06205a17ec8c7a7def4ba36 *man/camera_fisheye.Rd
 eb98ccf91d7fa1f68c97ad6627801c6b *man/canopy_fisheye.Rd
+b4e1ad5806dd7efe3a82b31250b8cc8b *man/figures/README-Gell-1.png
 f8122088b7617f798419eea0ee2de936 *man/figures/README-unnamed-chunk-10-1.png
 992216016d2ef2ef762e97a08ea012ea *man/figures/README-unnamed-chunk-11-1.png
 5761405cdda5607151ea24da2c80bf1b *man/figures/README-unnamed-chunk-12-1.png
