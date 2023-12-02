@@ -1,3 +1,6 @@
+# hemispheR 1.1.1
+- Azimuth segments from `gapfrac_fisheye()` are now ordered following the North-clockwise convention, instead of the East-counterclockwise one (i.e., using `atan2(x,y)` instead of `atan2(y,x)`).
+
 # hemispheR 1.1.0
 - Fixed a bug in naming `GF` cols in `gapfrac_fisheye()` function & display segments
 

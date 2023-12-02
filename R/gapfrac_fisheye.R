@@ -100,17 +100,19 @@ gapfrac_fisheye <- function(img.bw,
       message(paste('Used parameters xc, yc and rc are',xc,yc,rc,sep=", "))
     }}
 
+  #convert cartesian to polar coordinates
+  #origin:
   imgdf$dx<-imgdf$x-mean(imgdf$x)
   imgdf$dy<-imgdf$y-mean(imgdf$y)
   imgdf$r<-round(sqrt(imgdf$dx^2+imgdf$dy^2))
 
-  imgdf$theta=NA
-  imgdf$theta[imgdf$dx>0 & imgdf$dy>=0] <- atan(imgdf$dy[imgdf$dx>0 & imgdf$dy>=0]/imgdf$dx[imgdf$dx>0 & imgdf$dy>=0])
-  imgdf$theta[imgdf$dx>0 & imgdf$dy<0] <- atan(imgdf$dy[imgdf$dx>0 & imgdf$dy<0]/imgdf$dx[imgdf$dx>0 & imgdf$dy<0])+2*pi
-  imgdf$theta[imgdf$dx<0] <- atan(imgdf$dy[imgdf$dx<0]/imgdf$dx[imgdf$dx<0])+pi
-  imgdf$theta[imgdf$dx==0 & imgdf$dy>0] <- pi/2
-  imgdf$theta[imgdf$dx==0 & imgdf$dy<0] <- pi*3/2
-  imgdf$theta<-imgdf$theta*180/pi
+  #azimuth theta:
+  imgdf$theta <- NA
+  # imgdf$theta <- atan2(imgdf$dy,imgdf$dx) #East-conterclockwise
+  imgdf$theta <- base::atan2(imgdf$dx,imgdf$dy) #North-clockwise count
+  imgdf$theta[imgdf$theta<0] <- imgdf$theta[imgdf$theta<0] + 2*pi #rescale range to 0-2 pi instead of -pi, pi
+  imgdf$theta<-imgdf$theta*180/pi #convert to degree
+
 
   startVZA=startVZA
   endVZA=endVZA
