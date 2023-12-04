@@ -1,3 +1,7 @@
+# hemispheR 1.1.2
+- The display of `import_fisheye()` reports the selected circular mask centre.
+- Additionally, a warning is displayed if the selected circular mask falls outside the image area;
+
 # hemispheR 1.1.1
 - Azimuth segments from `gapfrac_fisheye()` are now ordered following the North-clockwise convention, instead of the East-counterclockwise one (i.e., using `atan2(x,y)` instead of `atan2(y,x)`).
 

@@ -206,8 +206,23 @@ import_fisheye <- function(filename, channel=3, circ.mask=NULL,circular=TRUE,gam
       if(message==TRUE){
         message(paste0('It is a fullframe fisheye, where xc, yc and radius are ',xc,', ',yc,', ',rc))
       }}
+
+    #create the circular mask
     xy <- terra::xyFromCell(img,1:terra::ncell(img))
     circular.mask = (xy[,1] - xc)^2 + (xy[,2] - yc)^2 <= rc^2
+
+    if(!is.null(circ.mask) & (xc + rc > ext(img)[2] | rc > xc)){
+      message('The applied xc+rc parameters fall outside the image area.
+              It will affect subsequent mask calculations.')
+    }
+
+    if(!is.null(circ.mask) & (yc + rc > ext(img)[4] | rc > yc)){
+      message('The applied yc+rc parameters fall outside the image area.
+              It will affect subsequent mask calculations.')
+    }
+
+    # xc=terra::ext(img)[2]/2
+    # yc=terra::ext(img)[4]/2
 
     if (display==TRUE){
       terra::crs(img) <-NULL
