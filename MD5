@@ -1,8 +1,8 @@
-d650cabc2cba7c5a00bd4681c9004048 *DESCRIPTION
+423b3694b8972fdf2abc461adb56b2ac *DESCRIPTION
 52e53c39c63be08eb5cc34ed674abb43 *LICENSE
 7d9a1d6474b4b66e51e0a5ad8e5885ba *NAMESPACE
-b036607e0440cd22f918610b4a0b1546 *NEWS.md
-8c8beb9ed37faa189e759bf2bf205089 *R/binarize_fisheye.R
+f312abdc85a18336d4e1cb6f9a528116 *NEWS.md
+20f6151fbce7924b59b53c3dc27ac77e *R/binarize_fisheye.R
 3dcb36d1996601231bfb7cd75dce3f5f *R/camera_fisheye.R
 2e3c08fde7f78bb06de75a89171eee72 *R/canopy_fisheye.R
 cb3b24ee6a417901855c611c8b83cd26 *R/gapfrac_fisheye.R

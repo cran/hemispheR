@@ -1,3 +1,5 @@
+# hemispheR 1.1.3
+- Fixed a bug on reading metags in `binarize_fisheye()`
 # hemispheR 1.1.2
 - The display of `import_fisheye()` reports the selected circular mask centre.
 - Additionally, a warning is displayed if the selected circular mask falls outside the image area;

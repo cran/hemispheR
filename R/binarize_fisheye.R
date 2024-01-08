@@ -119,11 +119,9 @@ binarize_fisheye <- function(img, method='Otsu', zonal=FALSE, manual=NULL, displ
   }
 
 
-  terra::metags(img)
 
-  terra::metags(img.bw) <- cbind(c('channel','stretch','gamma', 'zonal', 'thd', 'method'),
-                              c(terra::metags(img, 'channel'), terra::metags(img, 'stretch'), terra::metags(img, 'gamma'), as.character(zonal), ifelse(length(th)>1,paste0(th,collapse='_'),th), method))
-
+  terra::metags(img.bw) <- terra::metags(img)
+  terra::metags(img.bw)<-c(zonal=zonal, thd=ifelse(length(th)>1,paste0(th,collapse='_'),th), method=method)
 
   if (export == TRUE) {
     dir.create(base::file.path(base::getwd(), "results"),showWarnings = FALSE)
