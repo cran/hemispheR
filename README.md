@@ -12,9 +12,8 @@ The `hemispheR` package allows processing digital
 [hemispherical](https://en.wikipedia.org/wiki/Hemispherical_photography)
 (also called fisheye) images (either circular or fullframe) of forest
 canopies to retrieve canopy attributes like [canopy
-openness](https://www.ecologycenter.us/forest-ecology/measuring-canopy-closure.html)
-and leaf area index
-([LAI](https://en.wikipedia.org/wiki/Leaf_area_index)).
+openness](https://doi.org/10.1016/j.agrformet.2023.109308) and leaf area
+index ([LAI](https://en.wikipedia.org/wiki/Leaf_area_index)).
 
 ## Installation
 
@@ -136,11 +135,10 @@ $$
 $$
 
 Both the Green Excess Index
-(‘[GEI](https://www.sciencedirect.com/science/article/abs/pii/S0957417412005635)’)
-and the Green Leaf Algorithm
-(‘[GLA](https://doi.org/10.1080/10106040108542184)’) are visible (RGB)
-vegetation indexes, which are often used for short canopies or
-downward-looking images (see also below).
+(‘[GEI](https://doi.org/10.1016/j.eswa.2012.03.040)’) and the Green Leaf
+Algorithm (‘[GLA](https://doi.org/10.1080/10106040108542184)’) are
+visible (RGB) vegetation indexes, which are often used for short
+canopies or downward-looking images (see also below).
 The’[Luma](https://alienryderflex.com/hsp.html)’ method provides a
 weighted mean of RGB linear components, which resembles human’s colors
 perception (HSP color model). The ‘2BG’ method aimed to enhance contrast
@@ -239,26 +237,26 @@ gap.frac<-gapfrac_fisheye(
 ``` r
 head(gap.frac)
 #>                                        id ring     GF0_45    GF45_90   GF90_135
-#> 1 circular_coolpix4500+FC-E8_chestnut.jpg    5 0.04254649 0.12668810 0.05609833
-#> 2 circular_coolpix4500+FC-E8_chestnut.jpg   15 0.20285159 0.14235998 0.11460359
-#> 3 circular_coolpix4500+FC-E8_chestnut.jpg   25 0.08786911 0.07853917 0.05599374
-#> 4 circular_coolpix4500+FC-E8_chestnut.jpg   35 0.05836723 0.10967222 0.03381894
-#> 5 circular_coolpix4500+FC-E8_chestnut.jpg   45 0.03144297 0.05687816 0.01977497
-#> 6 circular_coolpix4500+FC-E8_chestnut.jpg   55 0.01906895 0.05737915 0.08741001
-#>    GF135_180  GF180_225   GF225_270  GF270_315  GF315_360  lens         circ
-#> 1 0.04019293 0.06649858 0.006752412 0.03561298 0.07041801 FC-E8 1136_852_754
-#> 2 0.12028276 0.04903867 0.056008700 0.06794124 0.04197934 FC-E8 1136_852_754
-#> 3 0.09634138 0.06792256 0.106224229 0.10305717 0.06669285 FC-E8 1136_852_754
-#> 4 0.08813624 0.11716016 0.061097671 0.08239523 0.04155401 FC-E8 1136_852_754
-#> 5 0.06933212 0.11588438 0.073508752 0.02757889 0.03303338 FC-E8 1136_852_754
-#> 6 0.07077830 0.19257719 0.036927811 0.06891697 0.01458520 FC-E8 1136_852_754
-#>   channel gamma method stretch thd zonal
-#> 1       3   2.2   Otsu   FALSE 107 FALSE
-#> 2       3   2.2   Otsu   FALSE 107 FALSE
-#> 3       3   2.2   Otsu   FALSE 107 FALSE
-#> 4       3   2.2   Otsu   FALSE 107 FALSE
-#> 5       3   2.2   Otsu   FALSE 107 FALSE
-#> 6       3   2.2   Otsu   FALSE 107 FALSE
+#> 1 circular_coolpix4500+FC-E8_chestnut.jpg    5 0.03561298 0.07041801 0.04254649
+#> 2 circular_coolpix4500+FC-E8_chestnut.jpg   15 0.06794124 0.04197934 0.20285159
+#> 3 circular_coolpix4500+FC-E8_chestnut.jpg   25 0.10305717 0.06669285 0.08786911
+#> 4 circular_coolpix4500+FC-E8_chestnut.jpg   35 0.08239523 0.04155401 0.05836723
+#> 5 circular_coolpix4500+FC-E8_chestnut.jpg   45 0.02757889 0.03303338 0.03144297
+#> 6 circular_coolpix4500+FC-E8_chestnut.jpg   55 0.06891697 0.01458520 0.01906895
+#>    GF135_180  GF180_225  GF225_270  GF270_315   GF315_360  lens         circ
+#> 1 0.12668810 0.05609833 0.04019293 0.06649858 0.006752412 FC-E8 1136_852_754
+#> 2 0.14235998 0.11460359 0.12028276 0.04903867 0.056008700 FC-E8 1136_852_754
+#> 3 0.07853917 0.05599374 0.09634138 0.06792256 0.106224229 FC-E8 1136_852_754
+#> 4 0.10967222 0.03381894 0.08813624 0.11716016 0.061097671 FC-E8 1136_852_754
+#> 5 0.05687816 0.01977497 0.06933212 0.11588438 0.073508752 FC-E8 1136_852_754
+#> 6 0.05737915 0.08741001 0.07077830 0.19257719 0.036927811 FC-E8 1136_852_754
+#>   channel stretch gamma zonal thd method
+#> 1       3   FALSE   2.2 FALSE 107   Otsu
+#> 2       3   FALSE   2.2 FALSE 107   Otsu
+#> 3       3   FALSE   2.2 FALSE 107   Otsu
+#> 4       3   FALSE   2.2 FALSE 107   Otsu
+#> 5       3   FALSE   2.2 FALSE 107   Otsu
+#> 6       3   FALSE   2.2 FALSE 107   Otsu
 ```
 
 where:  

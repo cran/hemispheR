@@ -42,7 +42,12 @@
 #' @export
 
 
-binarize_fisheye <- function(img, method='Otsu', zonal=FALSE, manual=NULL, display=FALSE, export=FALSE) {
+binarize_fisheye <- function(img,
+                             method='Otsu',
+                             zonal=FALSE,
+                             manual=NULL,
+                             display=FALSE,
+                             export=FALSE) {
 
 
   if (terra::nlyr(img) > 1) {
@@ -120,8 +125,26 @@ binarize_fisheye <- function(img, method='Otsu', zonal=FALSE, manual=NULL, displ
 
 
 
-  terra::metags(img.bw) <- terra::metags(img)
-  terra::metags(img.bw)<-c(zonal=zonal, thd=ifelse(length(th)>1,paste0(th,collapse='_'),th), method=method)
+
+
+  tags <- tryCatch(
+    terra::metags(img),
+    error = function(e) {
+      message("Unable to retrieve metadata using terra::metags(). This may be due to a change in the terra package or the image format.")
+      return(NULL)
+    }
+  )
+
+  if (is.null(tags)) {
+    message("Metadata is not available or could not be read from the image. Please ensure you are using a supported version of the 'terra' package or a valid image file.")
+  } else {
+
+    terra::metags(img.bw) <- terra::metags(img)
+    terra::metags(img.bw)<-c(zonal=zonal, thd=ifelse(length(th)>1,paste0(th,collapse='_'),th), method=method)
+
+  }
+
+
 
   if (export == TRUE) {
     dir.create(base::file.path(base::getwd(), "results"),showWarnings = FALSE)

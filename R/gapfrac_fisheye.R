@@ -429,20 +429,47 @@ gapfrac_fisheye <- function(img.bw,
     dplyr::relocate(id) |>
     dplyr::ungroup()
 
-  metadata <- terra::metags(img.bw)
 
-  if (length(setdiff(c('channel','stretch','gamma','zonal','thd','method'),
-                     names(metadata)))>0){
-    dif <- setdiff(c('channel','stretch','gamma','zonal','thd','method'),
-                   names(metadata))
-    metadf=data.frame(channel=NA,stretch=NA,gamma=NA,zonal=NA,thd=NA,method=NA)
-    w=2
-    for (w in 1:length(dif)){
-      metadf[names(metadf) == names(metadata)[w]] <-metadata[names(metadata)[w]]
+  # Create your default data frame
+  metadf <- data.frame(channel = NA,
+                       stretch = NA,
+                       gamma = NA,
+                       zonal = NA,
+                       thd = NA,
+                       method = NA,
+                       stringsAsFactors = FALSE)
+
+  tags <- tryCatch(
+    terra::metags(img.bw),
+    error = function(e) {
+      message("Unable to retrieve metadata using terra::metags(). This may be due to a change in the terra package or the image format.")
+      return(NULL)
     }
+  )
+
+  if (is.null(tags)) {
+    message("Metadata is not available or could not be read from the image. Please ensure you are using a supported version of the 'terra' package or a valid image file.")
+    metadata <- data.frame(name = c('channel',
+                                    'stretch',
+                                    'gamma',
+                                    'zonal',
+                                    'thd',
+                                    'method'),
+                           value=NA)
   } else {
-    metadf <- as.data.frame(t(metadata))
+    metadata <- terra::metags(img.bw)
   }
+
+
+
+
+  # Fill in values only if the name is a valid column in metadf
+  for (w in seq_len(nrow(metadata))) {
+    if (metadata$name[w] %in% names(metadf)) {
+      metadf[[metadata$name[w]]] <- metadata$value[w]
+    }
+  }
+
 
   rdfw<-cbind(rdfw,metadf)
 

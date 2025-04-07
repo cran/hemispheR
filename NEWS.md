@@ -1,3 +1,9 @@
+# hemispheR 1.1.6
+- Fixed a bug due to terra::metags() cannot read image metadata in terra's 1.8-42
+
+# hemispheR 1.1.5
+- Required terra >= 1.8-43
+
 # hemispheR 1.1.4
 - Required terra >= 1.7-65
 
