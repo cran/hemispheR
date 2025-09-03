@@ -63,6 +63,7 @@ import_fisheye <- function(filename, channel=3, circ.mask=NULL,circular=TRUE,gam
     stop(cat('Unknown channel method. You can select a number corresponding to a image channel or:\n"',sep='',
              paste0(channel.list,collapse='",\n"'),'".'))
   }
+
   mxk <- suppressWarnings({
     if (is.numeric(channel)){
       nly<-terra::nlyr(terra::rast(filename))
@@ -211,12 +212,12 @@ import_fisheye <- function(filename, channel=3, circ.mask=NULL,circular=TRUE,gam
     xy <- terra::xyFromCell(img,1:terra::ncell(img))
     circular.mask = (xy[,1] - xc)^2 + (xy[,2] - yc)^2 <= rc^2
 
-    if(!is.null(circ.mask) & (xc + rc > ext(img)[2] | rc > xc)){
+    if(!is.null(circ.mask) & (xc + rc > terra::ext(img)[2] | rc > xc)){
       message('The applied xc+rc parameters fall outside the image area.
               It will affect subsequent mask calculations.')
     }
 
-    if(!is.null(circ.mask) & (yc + rc > ext(img)[4] | rc > yc)){
+    if(!is.null(circ.mask) & (yc + rc > terra::ext(img)[4] | rc > yc)){
       message('The applied yc+rc parameters fall outside the image area.
               It will affect subsequent mask calculations.')
     }
@@ -246,9 +247,14 @@ import_fisheye <- function(filename, channel=3, circ.mask=NULL,circular=TRUE,gam
     }
 
   })
+
   # options(warn = oldw)
+  terra::values(img) <- round(terra::values(img))
+
   terra::metags(img) <- cbind(c('channel','stretch','gamma'),
                               c(channel, as.character(stretch), gamma))
+
+
   return(img)
 }
 

@@ -1,13 +1,13 @@
-211703c602e7018221d3cd11ef398ffc *DESCRIPTION
+cf625e748dd4068fd46ec8ab20fedd3c *DESCRIPTION
 52e53c39c63be08eb5cc34ed674abb43 *LICENSE
 7d9a1d6474b4b66e51e0a5ad8e5885ba *NAMESPACE
-284a32c2a1daff7842aa00ca4f58fc20 *NEWS.md
-bdffd42909aeb8d2716d2218372ecd80 *R/binarize_fisheye.R
+67273c73db60949b7d2910dbfef72a6d *NEWS.md
+def86378abd0c22949afffda45f81a5f *R/binarize_fisheye.R
 3dcb36d1996601231bfb7cd75dce3f5f *R/camera_fisheye.R
 2e3c08fde7f78bb06de75a89171eee72 *R/canopy_fisheye.R
 ffeba4ef4127fde6fe804df98bf209f4 *R/gapfrac_fisheye.R
 df6cc46bc7fae1a55b713f3d5065b35a *R/hemispheR-package.R
-db33b771359fb52314730c131e8a337a *R/import_fisheye.R
+5e6d52f6d980529ebd87fdfb09c9d010 *R/import_fisheye.R
 8b5f522aa5d4c8d823ade874a631473e *R/zonal_mask.R
 e3701197ec35a8d6895cab6bd969d976 *README.md
 4454e632feb75ce4f508807d50b3b12f *build/partial.rdb

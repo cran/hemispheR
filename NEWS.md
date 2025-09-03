@@ -1,3 +1,7 @@
+# hemispheR 1.1.7
+- pixel values are rounded (0 digits after) `import_fisheye()`
+- output images as forced as.int after `binarize_fisheye()`
+
 # hemispheR 1.1.6
 - Fixed a bug due to terra::metags() cannot read image metadata in terra's 1.8-42
 

@@ -116,6 +116,8 @@ binarize_fisheye <- function(img,
     base::names(img.bw) <- base::names(img)
   }
 
+  img.bw <- terra::as.int(img.bw)
+
   if (display==TRUE){
     terra::plot(img.bw,col=c('black','white'),legend=FALSE,
                  main=ifelse(length(th)>1,
@@ -152,7 +154,7 @@ binarize_fisheye <- function(img,
   }
 
   mk<- is.na(img.bw)
-  img.bw[mk]<-NA
+  img.bw[mk]<-NA_integer_
   return(img.bw)
 }
 
