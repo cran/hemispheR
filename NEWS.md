@@ -1,3 +1,7 @@
+# hemispheR 1.1.8
+- fixed exporting JPEG with NAs mask
+- rast are flipped along rows
+
 # hemispheR 1.1.7
 - pixel values are rounded (0 digits after) `import_fisheye()`
 - output images as forced as.int after `binarize_fisheye()`

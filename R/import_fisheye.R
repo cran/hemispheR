@@ -11,7 +11,7 @@
 #' @param message Logical. If is set to TRUE, it prints the mask used for importing the image. Default to TRUE.
 #'
 #' @return A single-channel image (SpatRaster).
-#' @importFrom terra nlyr rast values stretch ext xyFromCell ncell plot crs metags
+#' @importFrom terra nlyr rast values stretch ext xyFromCell ncell plot crs metags flip
 #' @importFrom dismo circles
 #' @importFrom graphics segments
 #' @importFrom grDevices gray.colors
@@ -160,7 +160,9 @@ import_fisheye <- function(filename, channel=3, circ.mask=NULL,circular=TRUE,gam
 
 
     #create the target raster and fill with values:
-    img<-terra::rast(filename, lyr=1)
+    img<-terra::rast(filename, lyr=1) |>
+      flip()
+
     terra::values(img)<-img.values
 
     if (stretch==TRUE){

@@ -150,7 +150,15 @@ binarize_fisheye <- function(img,
 
   if (export == TRUE) {
     dir.create(base::file.path(base::getwd(), "results"),showWarnings = FALSE)
-    jpeg::writeJPEG(matrix(terra::values(img.bw), nrow = nrow(img.bw), byrow=T),target=base::paste0(base::file.path(base::getwd()), '/results/class_',base::names(img.bw)))
+
+    vals <- terra::values(img.bw)
+    # this is 'cause writeJPEG can't handle NAs:
+    vals[is.na(vals)] <- -1
+
+    # Create the matrix in correct shape
+    mat <- matrix(vals, nrow = nrow(img.bw), byrow = TRUE)
+
+      jpeg::writeJPEG(mat,target=base::paste0(base::file.path(base::getwd()), '/results/class_',base::names(img.bw)))
   }
 
   mk<- is.na(img.bw)
